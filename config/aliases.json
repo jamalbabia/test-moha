@@ -1,6 +1,6 @@
 {
     "play": ["p","شغل"],
-    "skip": ["s"],
-    "volume": ["vol"],
+    "skip": ["s","تخطي"],
+    "vol": ["vol","v"],
     "queue": ["q"]
 }
