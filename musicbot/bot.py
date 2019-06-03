@@ -1145,7 +1145,7 @@ class MusicBot(discord.Client):
                 cmd = getattr(self, 'cmd_' + command, None)
                 if cmd and not hasattr(cmd, 'dev_cmd'):
                     return Response(
-                        "{}".format(
+                        "```\n{}```".format(
                             dedent(cmd.__doc__)
                         ).format(command_prefix=self.config.command_prefix),
                         delete_after=60
@@ -1158,7 +1158,7 @@ class MusicBot(discord.Client):
 
         else:
             await self.gen_cmd_list(message)
-
+ 
         desc = '```\n' + ', '.join(self.commands) + '\n```\n' + self.str.get(
             'cmd-help-response', 'For information about a particular command, run `{}help [command]`\n'
                                  'For further help, see https://just-some-bots.github.io/MusicBot/').format(prefix)
@@ -1427,7 +1427,7 @@ class MusicBot(discord.Client):
                     download=False,
                     process=True,    # ASYNC LAMBDAS WHEN
                     on_error=lambda e: asyncio.ensure_future(
-                        self.safe_send_message(channel, "%s" % e, expire_in=120), loop=self.loop),
+                        self.safe_send_message(channel, "```\n%s\n```" % e, expire_in=120), loop=self.loop),
                     retry_on_error=True
                 )
 
@@ -1447,7 +1447,7 @@ class MusicBot(discord.Client):
                 info = await self.downloader.extract_info(player.playlist.loop, song_url, download=False, process=False)
                 # Now I could just do: return await self.cmd_play(player, channel, author, song_url)
                 # But this is probably fine
-
+ 
             # If it's playlist
             if 'entries' in info:
                 await self._do_playlist_checks(permissions, player, author, info['entries'])
@@ -2581,10 +2581,10 @@ class MusicBot(discord.Client):
 
     @dev_only
     async def cmd_debug(self, message, _player, *, data):
-        codeblock = "{}"
+        codeblock = "```py\n{}\n```"
         result = None
 
-        if data.startswith('```') and data.endswith('```'):
+       if data.startswith('```') and data.endswith('```'):
             data = '\n'.join(data.rstrip('`\n').split('\n')[1:])
 
         code = data.strip('` \n')
@@ -2746,7 +2746,7 @@ class MusicBot(discord.Client):
                     raise exceptions.PermissionsError(
                         "This command is disabled for your group ({}).".format(user_permissions.name),
                         expire_in=20)
-
+ 
             # Invalid usage, return docstring
             if params:
                 docs = getattr(handler, '__doc__', None)
@@ -2760,7 +2760,7 @@ class MusicBot(discord.Client):
                 docs = dedent(docs)
                 await self.safe_send_message(
                     message.channel,
-                    '{}'.format(docs.format(command_prefix=self.config.command_prefix)),
+                     '```\n{}\n```'.format(docs.format(command_prefix=self.config.command_prefix)),
                     expire_in=60
                 )
                 return
@@ -2797,7 +2797,7 @@ class MusicBot(discord.Client):
                 content.add_field(name='Error', value=e.message, inline=False)
                 content.colour = 13369344
             else:
-                content = '{}'.format(e.message)
+               content = '```\n{}\n```'.format(e.message)
 
             await self.safe_send_message(
                 message.channel,
@@ -2812,7 +2812,7 @@ class MusicBot(discord.Client):
         except Exception:
             log.error("Exception in on_message", exc_info=True)
             if self.config.debug_mode:
-                await self.safe_send_message(message.channel, '{}'.format(traceback.format_exc()))
+                await self.safe_send_message(message.channel, '```\n{}\n```'.format(traceback.format_exc()))
 
         finally:
             if not sentmsg and not response and self.config.delete_invoking:
