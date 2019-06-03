@@ -38,7 +38,7 @@
   "cmd-play-song-limit": "مدة الأغنية تتجاوز الحد ({0} > {1})",
   "cmd-play-song-reply": "في فائمة الأنتظار `%s`. %s",
   "cmd-play-next": "التالي!",
-  "cmd-play-eta": " - الوقت المقدر حتى تشغيل: %s",
+  "cmd-play-eta": " - الوقت المقدر حتى تشغيل: **%s**",
   "cmd-play-badextractor": "ليس لديك إذن لتشغيل الوسائط من هذه الخدمة.",
   "cmd-stream-limit": "لقد بلغت الحد المسموح به للأغنية ({0})",
   "cmd-stream-success": "Streaming.",
