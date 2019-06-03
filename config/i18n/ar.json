@@ -36,7 +36,7 @@
   "cmd-play-playlist-skipped": "\nبالإضافة إلى, تم تخطي الأغنية الحالية لكونها طويلة جدًا.",
   "cmd-play-playlist-reply-secs": "في قائمة الأنتظار {0} أغنية ليتم تشغيلها في مدة {1} ثانية",
   "cmd-play-song-limit": "مدة الأغنية تتجاوز الحد ({0} > {1})",
-  "cmd-play-song-reply": "في فائمة الأنتظار **%s**:notes:. %s",
+  "cmd-play-song-reply": "في فائمة الأنتظار %s :notes:. %s",
   "cmd-play-next": "التالي!",
   "cmd-play-eta": " - الوقت المقدر حتى تشغيل: **%s**",
   "cmd-play-badextractor": "ليس لديك إذن لتشغيل الوسائط من هذه الخدمة.",
