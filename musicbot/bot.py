@@ -1117,10 +1117,10 @@ class MusicBot(discord.Client):
 
     async def cmd_resetplaylist(self, player, channel):
         """
-        Usage:
+        :bulb: أستخدام:
             {command_prefix}resetplaylist
 
-        Resets all songs in the server's autoplaylist
+        ``سيتم أعادة جميع اغاني الموجودة في قائمة التشغيل التلقائية``
         """
         player.autoplaylist = list(set(self.autoplaylist))
         return Response(self.str.get('cmd-resetplaylist-response', '\N{OK HAND SIGN}'), delete_after=15)
@@ -1128,11 +1128,9 @@ class MusicBot(discord.Client):
     async def cmd_help(self, message, channel, command=None):
         """
         Usage:
-            {command_prefix}help [command]
+            {command_prefix}help **<الأمر>**
 
-        Prints a help message.
-        If a command is specified, it prints a help message for that command.
-        Otherwise, it lists the available commands.
+       ``سيظهر لك معلومات عن الأمر وكيفية أستخدامه``
         """
         self.commands = []
         self.is_all = False
@@ -1171,11 +1169,11 @@ class MusicBot(discord.Client):
 
     async def cmd_blacklist(self, message, user_mentions, option, something):
         """
-        Usage:
-            {command_prefix}blacklist [ + | - | add | remove ] @UserName [@UserName2 ...]
+        :bulb: أستخدام:
+            {command_prefix}blacklist **[ + | - | add | remove ] @UserName [@UserName2 ...]**
 
-        Add or remove users to the blacklist.
-        Blacklisted users are forbidden from using bot commands.
+        ``اضافة وأزالة شخص من قائمة السوداء``
+        القائمة السوداء : ``هو عدم أمكانية الشخص من أستخدام أي امر من البوت``
         """
 
         if not user_mentions:
@@ -1218,8 +1216,8 @@ class MusicBot(discord.Client):
 
     async def cmd_id(self, author, user_mentions):
         """
-        Usage:
-            {command_prefix}id [@user]
+        :bulb: أستخدام:
+            {command_prefix}id **[@user]**
 
         Tells the user their id or the id of another user.
         """
@@ -1232,9 +1230,9 @@ class MusicBot(discord.Client):
     async def cmd_save(self, player, url=None):
         """
         Usage:
-            {command_prefix}save [url]
+            {command_prefix}save **<رابط>**
 
-        Saves the specified song or current song if not specified to the autoplaylist.
+        ``يحفظ الأغنية المحددة أو الأغنية الحالية إذا لم يتم تحديدها في قائمة التشغيل التلقائي.``
         """
         if url or (player.current_entry and not isinstance(player.current_entry, StreamPlaylistEntry)):
             if not url:
@@ -1253,7 +1251,7 @@ class MusicBot(discord.Client):
     @owner_only
     async def cmd_joinserver(self, message, server_link=None):
         """
-        Usage:
+        :bulb: أستخدام:
             {command_prefix}joinserver invite_link
 
         Asks the bot to join a server.  Note: Bot accounts cannot use invite links.
@@ -1267,7 +1265,7 @@ class MusicBot(discord.Client):
 
     async def cmd_karaoke(self, player, channel, author):
         """
-        Usage:
+        :bulb: أستخدام:
             {command_prefix}karaoke
 
         Activates karaoke mode. During karaoke mode, only groups with the BypassKaraokeMode
@@ -1300,17 +1298,10 @@ class MusicBot(discord.Client):
 
     async def cmd_play(self, message, player, channel, author, permissions, leftover_args, song_url):
         """
-        Usage:
-            {command_prefix}play song_link
-            {command_prefix}play text to search for
-            {command_prefix}play spotify_uri
-
-        Adds the song to the playlist.  If a link is not provided, the first
-        result from a youtube search is added to the queue.
-
-        If enabled in the config, the bot will also support Spotify URIs, however
-        it will use the metadata (e.g song name and artist) to find a YouTube
-        equivalent of the song. Streaming from Spotify is not possible.
+        :bulb: أستخدام:
+            {command_prefix}play **<رابط الأغنية>**
+            {command_prefix}play **<أسم الأغنية>** 
+            {command_prefix}play **<رابط سبوتفي>**
         """
 
         song_url = song_url.strip('<>')
@@ -1666,13 +1657,10 @@ class MusicBot(discord.Client):
 
     async def cmd_stream(self, player, channel, author, permissions, song_url):
         """
-        Usage:
-            {command_prefix}stream song_link
+        :bulb: أستخدام:
+            {command_prefix}stream **<رابط الأغنية>**
 
-        Enqueue a media stream.
-        This could mean an actual stream like Twitch or shoutcast, or simply streaming
-        media without predownloading it.  Note: FFmpeg is notoriously bad at handling
-        streams, especially on poor connections.  You have been warned.
+         ``سيتم تشغيل الأغنية الموجودة في البث المباشر . سواء من موقع تويتش``
         """
 
         song_url = song_url.strip('<>')
@@ -1694,7 +1682,7 @@ class MusicBot(discord.Client):
 
     async def cmd_search(self, message, player, channel, author, permissions, leftover_args):
         """
-        Usage:
+        :bulb: أستخدام:
             {command_prefix}search [service] [number] query
 
         Searches a service for a video and adds it to the queue.
@@ -1819,10 +1807,10 @@ class MusicBot(discord.Client):
 
     async def cmd_np(self, player, channel, guild, message):
         """
-        Usage:
+        :bulb: أستخدام:
             {command_prefix}np
 
-        Displays the current song in chat.
+        ``سيتم أرسال معلومات الأغنية قيد التشغيل الأن``
         """
 
         if player.current_entry:
@@ -1885,10 +1873,10 @@ class MusicBot(discord.Client):
 
     async def cmd_summon(self, channel, guild, author, voice_channel):
         """
-        Usage:
+         :bulb: أستخدام:
             {command_prefix}summon
 
-        Call the bot to the summoner's voice channel.
+        ``دخول البوت الى روم الصوتي الخاص بك``
         """
 
         if not author.voice:
@@ -1929,10 +1917,10 @@ class MusicBot(discord.Client):
 
     async def cmd_pause(self, player):
         """
-        Usage:
+        :bulb: أستخدام:
             {command_prefix}pause
 
-        Pauses playback of the current song.
+        ``أيقاف الأغنية بشكل مؤقت``
         """
 
         if player.is_playing:
@@ -1944,10 +1932,10 @@ class MusicBot(discord.Client):
 
     async def cmd_resume(self, player):
         """
-        Usage:
+        :bulb: أستخدام:
             {command_prefix}resume
 
-        Resumes playback of a paused song.
+         ``مواصلة الأغنية``
         """
 
         if player.is_paused:
@@ -1959,10 +1947,10 @@ class MusicBot(discord.Client):
 
     async def cmd_shuffle(self, channel, player):
         """
-        Usage:
+        :bulb: أستخدام:
             {command_prefix}shuffle
 
-        Shuffles the server's queue.
+        ``ازالة جميع الأغاني من قائمة الأنتظار``
         """
 
         player.playlist.shuffle()
