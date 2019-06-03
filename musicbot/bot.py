@@ -476,10 +476,10 @@ class MusicBot(discord.Client):
                     player.voice_client.channel.name, entry.title, entry.meta['author'].name)
                 player.skip()
             elif self.config.now_playing_mentions:
-                newmsg = 'قيد تشغيل الأن **%s**:notes: في : `%s` \n بواسطة **%s**' % (
+                newmsg = 'قيد تشغيل الأن في : ``%s``- **%s** :notes: \n بواسطة : **%s**' % (
                     entry.meta['author'].mention, entry.title, player.voice_client.channel.name)
             else:
-                newmsg = 'قيد تشغيل الأن **%s**:notes: في : `%s` \n بواسطة **%s**' % (
+                newmsg = 'قيد تشغيل الأن في : ``%s``- **%s** :notes: \n بواسطة : **%s**' % (
                     player.voice_client.channel.name, entry.title, entry.meta['author'].name)
         else:
             # no author (and channel), it's an autoplaylist (or autostream from my other PR) entry.
@@ -1551,7 +1551,7 @@ class MusicBot(discord.Client):
 
                 entry, position = await player.playlist.add_entry(song_url, channel=channel, author=author)
 
-                reply_text = self.str.get('cmd-play-song-reply', "Enqueued `%s` to be played. Position in queue: %s")
+                reply_text = self.str.get('cmd-play-song-reply', "Enqueued **%s** to be played. Position in queue: %s")
                 btext = entry.title
 
             if position == 1 and player.is_stopped:
