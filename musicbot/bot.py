@@ -2397,7 +2397,7 @@ class MusicBot(discord.Client):
         ``ارسال الصلاحيات التي يمكن للشخص استخدام أوامر البوت به``
         """
 
-        lines = ['Command permissions in %s\n' % guild.name, '', '']
+         lines = ['Command permissions in %s\n' % guild.name, '```', '```']
 
         if user_mentions:
             user = user_mentions[0]
