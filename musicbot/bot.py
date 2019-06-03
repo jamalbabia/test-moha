@@ -479,7 +479,7 @@ class MusicBot(discord.Client):
                 newmsg = 'قيد تشغيل الأن في : ``%s``- `%s` :notes: \n بواسطة : **%s**' % (
                     entry.meta['author'].mention, entry.title, player.voice_client.channel.name)
             else:
-                newmsg = 'قيد تشغيل الأن في : ``%s``- `%s` :notes: \n بواسطة : **%s**' % (
+                newmsg = 'قيد تشغيل الأن في : ``%s`` - `%s` :notes: \n بواسطة : **%s**' % (
                     player.voice_client.channel.name, entry.title, entry.meta['author'].name)
         else:
             # no author (and channel), it's an autoplaylist (or autostream from my other PR) entry.
@@ -1117,20 +1117,22 @@ class MusicBot(discord.Client):
 
     async def cmd_resetplaylist(self, player, channel):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}resetplaylist
 
-        ``سيتم أعادة جميع اغاني الموجودة في قائمة التشغيل التلقائية``
+        Resets all songs in the server's autoplaylist
         """
         player.autoplaylist = list(set(self.autoplaylist))
         return Response(self.str.get('cmd-resetplaylist-response', '\N{OK HAND SIGN}'), delete_after=15)
 
     async def cmd_help(self, message, channel, command=None):
         """
-        :bulb: أستخدام:
-            {command_prefix}help [الأمر]
+        Usage:
+            {command_prefix}help [command]
 
- ``سيظهر لك معلومات عن الأمر وكيفية أستخدامه``
+        Prints a help message.
+        If a command is specified, it prints a help message for that command.
+        Otherwise, it lists the available commands.
         """
         self.commands = []
         self.is_all = False
@@ -1158,7 +1160,7 @@ class MusicBot(discord.Client):
 
         else:
             await self.gen_cmd_list(message)
- 
+
         desc = '```\n' + ', '.join(self.commands) + '\n```\n' + self.str.get(
             'cmd-help-response', 'For information about a particular command, run `{}help [command]`\n'
                                  'For further help, see https://just-some-bots.github.io/MusicBot/').format(prefix)
@@ -1169,11 +1171,11 @@ class MusicBot(discord.Client):
 
     async def cmd_blacklist(self, message, user_mentions, option, something):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}blacklist [ + | - | add | remove ] @UserName [@UserName2 ...]
 
-        ``اضافة وأزالة شخص من قائمة السوداء``
-       القائمة السوداء : ``هو عدم أمكانية الشخص من أستخدام أي امر من البوت``
+        Add or remove users to the blacklist.
+        Blacklisted users are forbidden from using bot commands.
         """
 
         if not user_mentions:
@@ -1216,7 +1218,7 @@ class MusicBot(discord.Client):
 
     async def cmd_id(self, author, user_mentions):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}id [@user]
 
         Tells the user their id or the id of another user.
@@ -1229,10 +1231,10 @@ class MusicBot(discord.Client):
 
     async def cmd_save(self, player, url=None):
         """
-        :bulb: أستخدام:
-            {command_prefix}save [رابط]
+        Usage:
+            {command_prefix}save [url]
 
-        ``يحفظ الأغنية المحددة أو الأغنية الحالية إذا لم يتم تحديدها في قائمة التشغيل التلقائي.``
+        Saves the specified song or current song if not specified to the autoplaylist.
         """
         if url or (player.current_entry and not isinstance(player.current_entry, StreamPlaylistEntry)):
             if not url:
@@ -1251,7 +1253,7 @@ class MusicBot(discord.Client):
     @owner_only
     async def cmd_joinserver(self, message, server_link=None):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}joinserver invite_link
 
         Asks the bot to join a server.  Note: Bot accounts cannot use invite links.
@@ -1265,7 +1267,7 @@ class MusicBot(discord.Client):
 
     async def cmd_karaoke(self, player, channel, author):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}karaoke
 
         Activates karaoke mode. During karaoke mode, only groups with the BypassKaraokeMode
@@ -1297,11 +1299,20 @@ class MusicBot(discord.Client):
         return True
 
     async def cmd_play(self, message, player, channel, author, permissions, leftover_args, song_url):
-           """  :bulb: أستخدام:
-            {command_prefix}play **<رابط الأغنية>**
-            {command_prefix}play **<أسم الأغنية>** 
-            {command_prefix}play **<رابط سبوتفي>** '
-"""
+        """
+        Usage:
+            {command_prefix}play song_link
+            {command_prefix}play text to search for
+            {command_prefix}play spotify_uri
+
+        Adds the song to the playlist.  If a link is not provided, the first
+        result from a youtube search is added to the queue.
+
+        If enabled in the config, the bot will also support Spotify URIs, however
+        it will use the metadata (e.g song name and artist) to find a YouTube
+        equivalent of the song. Streaming from Spotify is not possible.
+        """
+
         song_url = song_url.strip('<>')
 
         await self.send_typing(channel)
@@ -1447,7 +1458,7 @@ class MusicBot(discord.Client):
                 info = await self.downloader.extract_info(player.playlist.loop, song_url, download=False, process=False)
                 # Now I could just do: return await self.cmd_play(player, channel, author, song_url)
                 # But this is probably fine
- 
+
             # If it's playlist
             if 'entries' in info:
                 await self._do_playlist_checks(permissions, player, author, info['entries'])
@@ -1540,7 +1551,7 @@ class MusicBot(discord.Client):
 
                 entry, position = await player.playlist.add_entry(song_url, channel=channel, author=author)
 
-                reply_text = self.str.get('cmd-play-song-reply', "Enqueued **%s** to be played. Position in queue: %s")
+                reply_text = self.str.get('cmd-play-song-reply', "Enqueued `%s` to be played. Position in queue: %s")
                 btext = entry.title
 
             if position == 1 and player.is_stopped:
@@ -1655,10 +1666,13 @@ class MusicBot(discord.Client):
 
     async def cmd_stream(self, player, channel, author, permissions, song_url):
         """
-        :bulb: أستخدام:
-            {command_prefix}stream رابط الأغنية
+        Usage:
+            {command_prefix}stream song_link
 
-  ``سيتم تشغيل الأغنية الموجودة في البث المباشر . سواء من موقع تويتش``
+        Enqueue a media stream.
+        This could mean an actual stream like Twitch or shoutcast, or simply streaming
+        media without predownloading it.  Note: FFmpeg is notoriously bad at handling
+        streams, especially on poor connections.  You have been warned.
         """
 
         song_url = song_url.strip('<>')
@@ -1680,7 +1694,7 @@ class MusicBot(discord.Client):
 
     async def cmd_search(self, message, player, channel, author, permissions, leftover_args):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}search [service] [number] query
 
         Searches a service for a video and adds it to the queue.
@@ -1805,10 +1819,10 @@ class MusicBot(discord.Client):
 
     async def cmd_np(self, player, channel, guild, message):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}np
 
-        ``سيتم أرسال معلومات الأغنية قيد التشغيل الأن``
+        Displays the current song in chat.
         """
 
         if player.current_entry:
@@ -1871,10 +1885,10 @@ class MusicBot(discord.Client):
 
     async def cmd_summon(self, channel, guild, author, voice_channel):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}summon
 
-        ``دخول البوت الى روم الصوتي الخاص بك``
+        Call the bot to the summoner's voice channel.
         """
 
         if not author.voice:
@@ -1915,10 +1929,10 @@ class MusicBot(discord.Client):
 
     async def cmd_pause(self, player):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}pause
 
-        ``أيقاف الأغنية بشكل مؤقت``
+        Pauses playback of the current song.
         """
 
         if player.is_playing:
@@ -1930,10 +1944,10 @@ class MusicBot(discord.Client):
 
     async def cmd_resume(self, player):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}resume
 
-        ``مواصلة الأغنية``
+        Resumes playback of a paused song.
         """
 
         if player.is_paused:
@@ -1945,10 +1959,10 @@ class MusicBot(discord.Client):
 
     async def cmd_shuffle(self, channel, player):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}shuffle
 
-        ``ازالة جميع الأغاني من قائمة الأنتظار``
+        Shuffles the server's queue.
         """
 
         player.playlist.shuffle()
@@ -1969,10 +1983,10 @@ class MusicBot(discord.Client):
 
     async def cmd_clear(self, player, author):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}clear
 
-       ``حذف جميع قوائم التشغيل``
+        Clears the playlist.
         """
 
         player.playlist.clear()
@@ -1980,10 +1994,10 @@ class MusicBot(discord.Client):
 
     async def cmd_remove(self, user_mentions, message, author, permissions, channel, player, index=None):
         """
-        :bulb: أستخدام:
-            {command_prefix}remove [# في قائمة الأنتظار]
+        Usage:
+            {command_prefix}remove [# in queue]
 
-        ``مسح أغنية معينه من قائمة الأنتظار``
+        Removes queued songs. If a number is specified, removes that song in the queue, otherwise removes the most recently queued song.
         """
 
         if not player.playlist.entries:
@@ -2032,11 +2046,11 @@ class MusicBot(discord.Client):
 
     async def cmd_skip(self, player, channel, author, message, permissions, voice_channel, param=''):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}skip [force/f]
 
-  ``تخطي الأغنية``
-  ``فقط صاحب البوت او من يمتلك صلاحيات لتخطي الأغنية أجباريًا``
+        Skips the current song when enough votes are cast.
+        Owners and those with the instaskip permission can add 'force' or 'f' after the command to force skip.
         """
 
         if player.is_stopped:
@@ -2108,10 +2122,11 @@ class MusicBot(discord.Client):
 
     async def cmd_volume(self, message, player, new_volume=None):
         """
-        :bulb: أستخدام:
-            {command_prefix}volume [volume]
+        Usage:
+            {command_prefix}volume (+/-)[volume]
 
-``تعديل درجة صوت البوت``
+        Sets the playback volume. Accepted values are from 1 to 100.
+        Putting + or - before the volume will make the volume change relative to the current volume.
         """
 
         if not new_volume:
@@ -2151,7 +2166,7 @@ class MusicBot(discord.Client):
     @owner_only
     async def cmd_option(self, player, option, value):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}option [option] [on/y/enabled/off/n/disabled]
 
         Changes a config option without restarting the bot. Changes aren't permanent and
@@ -2204,10 +2219,10 @@ class MusicBot(discord.Client):
 
     async def cmd_queue(self, channel, player):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}queue
 
-        ``ارسال جميع الأغاني في قائمة الأنتظار``
+        Prints the current song queue.
         """
 
         lines = []
@@ -2254,10 +2269,10 @@ class MusicBot(discord.Client):
 
     async def cmd_clean(self, message, channel, guild, author, search_range=50):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}clean [range]
 
-        ``حذف جميع رسائل البوت ورسائل من قام بأستخدام البوت``
+        Removes up to [range] messages the bot has posted in chat. Default: 50, Max: 1000
         """
 
         try:
@@ -2288,10 +2303,10 @@ class MusicBot(discord.Client):
 
     async def cmd_pldump(self, channel, author, song_url):
         """
-        :bulb: أستخدام:
-            {command_prefix}pldump رابط قائمة التشغيل
+        Usage:
+            {command_prefix}pldump url
 
-        ``ارسال ملف يتضمن روابط أغنية قائمة التشغيل``
+        Dumps the individual urls of a playlist
         """
 
         try:
@@ -2333,7 +2348,7 @@ class MusicBot(discord.Client):
 
     async def cmd_listids(self, guild, author, leftover_args, cat='all'):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}listids [categories]
 
         Lists the ids for various things.  Categories are:
@@ -2391,13 +2406,13 @@ class MusicBot(discord.Client):
 
     async def cmd_perms(self, author, user_mentions, channel, guild, permissions):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}perms [@user]
 
-        ``ارسال الصلاحيات التي يمكن للشخص استخدام أوامر البوت به``
+        Sends the user a list of their permissions, or the permissions of the user specified.
         """
 
-         lines = ['Command permissions in %s\n' % guild.name, '```', '```']
+        lines = ['Command permissions in %s\n' % guild.name, '```', '```']
 
         if user_mentions:
             user = user_mentions[0]
@@ -2416,11 +2431,11 @@ class MusicBot(discord.Client):
     @owner_only
     async def cmd_setname(self, leftover_args, name):
         """
-        :bulb: أستخدام:
-            {command_prefix}setname أسم البوت الجديد
+        Usage:
+            {command_prefix}setname name
 
-        ``تغيير أسم البوت``
-        ملاحظة: ``يمكنك تغيير أسم البوت كل ساعتين``
+        Changes the bot's username.
+        Note: This operation is limited by discord to twice per hour.
         """
 
         name = ' '.join([name, *leftover_args])
@@ -2440,10 +2455,10 @@ class MusicBot(discord.Client):
 
     async def cmd_setnick(self, guild, channel, leftover_args, nick):
         """
-        :bulb: أستخدام:
-            {command_prefix}setnick أسم المستعار
+        Usage:
+            {command_prefix}setnick nick
 
-        ``تغيير اسم البوت في سيرفر``
+        Changes the bot's nickname.
         """
 
         if not channel.permissions_for(guild.me).change_nickname:
@@ -2461,10 +2476,11 @@ class MusicBot(discord.Client):
     @owner_only
     async def cmd_setavatar(self, message, url=None):
         """
-        :bulb: أستخدام:
-            {command_prefix}setavatar [رابط الصورة]
+        Usage:
+            {command_prefix}setavatar [url]
 
-        ``تغيير صورة البوت``
+        Changes the bot's avatar.
+        Attaching a file and leaving the url parameter blank also works.
         """
 
         if message.attachments:
@@ -2487,20 +2503,22 @@ class MusicBot(discord.Client):
 
     async def cmd_disconnect(self, guild):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}disconnect
         
-       ``غصب البوت على خروج من روم الصوتي``
+        Forces the bot leave the current voice channel.
         """
         await self.disconnect_voice_client(guild)
         return Response("Disconnected from `{0.name}`".format(guild), delete_after=20)
 
     async def cmd_restart(self, channel):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}restart
         
-        ``إعادة تشغيل البوت في حال وجود مشاكل أستخدم هذا الأمر``
+        Restarts the bot.
+        Will not properly load new dependencies or file updates unless fully shutdown
+        and restarted.
         """
         await self.safe_send_message(channel, "\N{WAVING HAND SIGN} Restarting. If you have updated your bot "
             "or its dependencies, you need to restart the bot properly, rather than using this command.")
@@ -2514,10 +2532,10 @@ class MusicBot(discord.Client):
 
     async def cmd_shutdown(self, channel):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}shutdown
         
-        ``خروج البوت من جميع رومات الصوتية وأطفاء البوت``
+        Disconnects from voice channels and closes the bot process.
         """
         await self.safe_send_message(channel, "\N{WAVING HAND SIGN}")
         
@@ -2530,10 +2548,11 @@ class MusicBot(discord.Client):
 
     async def cmd_leaveserver(self, val, leftover_args):
         """
-        :bulb: أستخدام:
+        Usage:
             {command_prefix}leaveserver <name/ID>
 
-        ``إخراج البوت من سيرفر معين``
+        Forces the bot to leave a server.
+        When providing names, names are case-sensitive.
         """
         if leftover_args:
             val = ' '.join([val, *leftover_args])
@@ -2584,7 +2603,7 @@ class MusicBot(discord.Client):
         codeblock = "```py\n{}\n```"
         result = None
 
-       if data.startswith('```') and data.endswith('```'):
+        if data.startswith('```') and data.endswith('```'):
             data = '\n'.join(data.rstrip('`\n').split('\n')[1:])
 
         code = data.strip('` \n')
@@ -2746,12 +2765,12 @@ class MusicBot(discord.Client):
                     raise exceptions.PermissionsError(
                         "This command is disabled for your group ({}).".format(user_permissions.name),
                         expire_in=20)
- 
+
             # Invalid usage, return docstring
             if params:
                 docs = getattr(handler, '__doc__', None)
                 if not docs:
-                    docs = ':bulb: أستخدام: {}{} {}'.format(
+                    docs = 'Usage: {}{} {}'.format(
                         self.config.command_prefix,
                         command,
                         ' '.join(args_expected)
@@ -2760,7 +2779,7 @@ class MusicBot(discord.Client):
                 docs = dedent(docs)
                 await self.safe_send_message(
                     message.channel,
-                     '```\n{}\n```'.format(docs.format(command_prefix=self.config.command_prefix)),
+                    '```\n{}\n```'.format(docs.format(command_prefix=self.config.command_prefix)),
                     expire_in=60
                 )
                 return
@@ -2797,7 +2816,7 @@ class MusicBot(discord.Client):
                 content.add_field(name='Error', value=e.message, inline=False)
                 content.colour = 13369344
             else:
-               content = '```\n{}\n```'.format(e.message)
+                content = '```\n{}\n```'.format(e.message)
 
             await self.safe_send_message(
                 message.channel,
