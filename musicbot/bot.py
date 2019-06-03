@@ -476,10 +476,10 @@ class MusicBot(discord.Client):
                     player.voice_client.channel.name, entry.title, entry.meta['author'].name)
                 player.skip()
             elif self.config.now_playing_mentions:
-                newmsg = 'قيد تشغيل الأن **%s**:notes: \n بواسطة **%s**' % (
+                newmsg = 'قيد تشغيل الأن **%s**:notes: في : `%s` \n بواسطة **%s**' % (
                     entry.meta['author'].mention, entry.title, player.voice_client.channel.name)
             else:
-                newmsg = 'قيد تشغيل الأن **%s**:notes: \n بواسطة **%s**' % (
+                newmsg = 'قيد تشغيل الأن **%s**:notes: في : `%s` \n بواسطة **%s**' % (
                     player.voice_client.channel.name, entry.title, entry.meta['author'].name)
         else:
             # no author (and channel), it's an autoplaylist (or autostream from my other PR) entry.
