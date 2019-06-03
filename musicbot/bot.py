@@ -1310,7 +1310,7 @@ class MusicBot(discord.Client):
 
         If enabled in the config, the bot will also support Spotify URIs, however
         it will use the metadata (e.g song name and artist) to find a YouTube
-        equivalent of the song. Streaming from Spotify is not possible.
+       `` equivalent of the song. Streaming from Spotify is not possible.``
         """
 
         song_url = song_url.strip('<>')
