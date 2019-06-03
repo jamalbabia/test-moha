@@ -627,7 +627,7 @@ class MusicBot(discord.Client):
         if 'channel' in entry.meta:
             await self.safe_send_message(
                 entry.meta['channel'],
-                "```\nError from FFmpeg:\n{}\n```".format(ex)
+                "Error from FFmpeg: {}".format(ex)
             )
         else:
             log.exception("Player error", exc_info=ex)
@@ -1147,7 +1147,7 @@ class MusicBot(discord.Client):
                 cmd = getattr(self, 'cmd_' + command, None)
                 if cmd and not hasattr(cmd, 'dev_cmd'):
                     return Response(
-                        "```\n{}```".format(
+                        "{}".format(
                             dedent(cmd.__doc__)
                         ).format(command_prefix=self.config.command_prefix),
                         delete_after=60
@@ -1161,7 +1161,7 @@ class MusicBot(discord.Client):
         else:
             await self.gen_cmd_list(message)
 
-        desc = '```\n' + ', '.join(self.commands) + '\n```\n' + self.str.get(
+        desc = '' + ', '.join(self.commands) + '' + self.str.get(
             'cmd-help-response', 'For information about a particular command, run `{}help [command]`\n'
                                  'For further help, see https://just-some-bots.github.io/MusicBot/').format(prefix)
         if not self.is_all:
@@ -1310,7 +1310,7 @@ class MusicBot(discord.Client):
 
         If enabled in the config, the bot will also support Spotify URIs, however
         it will use the metadata (e.g song name and artist) to find a YouTube
-       `` equivalent of the song. Streaming from Spotify is not possible.``
+        equivalent of the song. Streaming from Spotify is not possible.
         """
 
         song_url = song_url.strip('<>')
@@ -1438,7 +1438,7 @@ class MusicBot(discord.Client):
                     download=False,
                     process=True,    # ASYNC LAMBDAS WHEN
                     on_error=lambda e: asyncio.ensure_future(
-                        self.safe_send_message(channel, "```\n%s\n```" % e, expire_in=120), loop=self.loop),
+                        self.safe_send_message(channel, "%s" % e, expire_in=120), loop=self.loop),
                     retry_on_error=True
                 )
 
@@ -2412,7 +2412,7 @@ class MusicBot(discord.Client):
         Sends the user a list of their permissions, or the permissions of the user specified.
         """
 
-        lines = ['Command permissions in %s\n' % guild.name, '```', '```']
+        lines = ['Command permissions in %s\n' % guild.name, '', '']
 
         if user_mentions:
             user = user_mentions[0]
@@ -2600,10 +2600,10 @@ class MusicBot(discord.Client):
 
     @dev_only
     async def cmd_debug(self, message, _player, *, data):
-        codeblock = "```py\n{}\n```"
+        codeblock = "{}"
         result = None
 
-        if data.startswith('```') and data.endswith('```'):
+        if data.startswith('') and data.endswith(''):
             data = '\n'.join(data.rstrip('`\n').split('\n')[1:])
 
         code = data.strip('` \n')
@@ -2779,7 +2779,7 @@ class MusicBot(discord.Client):
                 docs = dedent(docs)
                 await self.safe_send_message(
                     message.channel,
-                    '```\n{}\n```'.format(docs.format(command_prefix=self.config.command_prefix)),
+                    '{}'.format(docs.format(command_prefix=self.config.command_prefix)),
                     expire_in=60
                 )
                 return
@@ -2816,7 +2816,7 @@ class MusicBot(discord.Client):
                 content.add_field(name='Error', value=e.message, inline=False)
                 content.colour = 13369344
             else:
-                content = '```\n{}\n```'.format(e.message)
+                content = '{}'.format(e.message)
 
             await self.safe_send_message(
                 message.channel,
@@ -2831,7 +2831,7 @@ class MusicBot(discord.Client):
         except Exception:
             log.error("Exception in on_message", exc_info=True)
             if self.config.debug_mode:
-                await self.safe_send_message(message.channel, '```\n{}\n```'.format(traceback.format_exc()))
+                await self.safe_send_message(message.channel, '{}'.format(traceback.format_exc()))
 
         finally:
             if not sentmsg and not response and self.config.delete_invoking:
