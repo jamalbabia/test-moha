@@ -474,7 +474,7 @@ class MusicBot(discord.Client):
             prog_str = ('`[{progress}]`' if streaming else '`[{total}]`').format(
                  total=song_total
             
-
+            )
             # percentage shows how much of the current song has already been played
 
 
