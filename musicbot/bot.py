@@ -470,11 +470,9 @@ class MusicBot(discord.Client):
                   # TODO: Fix timedelta garbage with util function
             song_total = ftimedelta(timedelta(seconds=player.current_entry.duration))
 
-            streaming = isinstance(player.current_entry, StreamPlaylistEntry)
-            prog_str = ('`[{progress}]`' if streaming else '`[{total}]`').format(
                  total=song_total
             
-            )
+
             # percentage shows how much of the current song has already been played
 
 
