@@ -476,11 +476,11 @@ class MusicBot(discord.Client):
                     player.voice_client.channel.name, entry.title, entry.meta['author'].name)
                 player.skip()
             elif self.config.now_playing_mentions:
-                newmsg = 'قيد التشغيل الأن في : ``%s``- `%s` - `(%s)` :notes: \nبواسطة : **%s**' % (
-                    prog_str, entry.meta['author'].mention, entry.title, player.voice_client.channel.name)
+                newmsg = 'قيد التشغيل الأن في : ``%s``- `%s` - :notes: \nبواسطة : **%s**' % (
+                    entry.meta['author'].mention, entry.title, player.voice_client.channel.name)
             else:
-                newmsg = 'قيد التشغيل الأن في : ``%s`` - `%s` - `(%s)` :notes: \nبواسطة : **%s**' % (
-                    player.voice_client.channel.name, entry.title, prog_str, entry.meta['author'].name)
+                newmsg = 'قيد التشغيل الأن في : ``%s`` - `%s` - :notes: \nبواسطة : **%s**' % (
+                    player.voice_client.channel.name, entry.title, entry.meta['author'].name)
         else:
             # no author (and channel), it's an autoplaylist (or autostream from my other PR) entry.
             newmsg = 'قيد التشغيل الأن تلقائي أضيف `%s` in `%s`' % (
