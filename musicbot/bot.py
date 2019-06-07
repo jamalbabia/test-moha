@@ -467,8 +467,9 @@ class MusicBot(discord.Client):
 
         channel = entry.meta.get('channel', None)
         author = entry.meta.get('author', None)
-        song_total = ftimedelta(timedelta(seconds=player.current_entry.duration))
-        total=song_total
+            song_total = ftimedelta(timedelta(seconds=player.current_entry.duration))
+            prog_str = '`(%s)`' % (song_total)
+
         if channel and author:
             author_perms = self.permissions.for_user(author)
 
@@ -477,11 +478,11 @@ class MusicBot(discord.Client):
                     player.voice_client.channel.name, entry.title, entry.meta['author'].name)
                 player.skip()
             elif self.config.now_playing_mentions:
-                newmsg = 'قيد التشغيل الأن في : ``%s``- `%s` - `({total})` :notes: \nبواسطة : **%s**' % (
-                    entry.meta['author'].mention, entry.title, player.voice_client.channel.name)
+                newmsg = 'قيد التشغيل الأن في : ``%s``- `%s` - `(%s)` :notes: \nبواسطة : **%s**' % (
+                    prog_str, entry.meta['author'].mention, entry.title, player.voice_client.channel.name)
             else:
-                newmsg = 'قيد التشغيل الأن في : ``%s`` - `%s` - `({total})` :notes: \nبواسطة : **%s**' % (
-                    player.voice_client.channel.name, entry.title, entry.meta['author'].name)
+                newmsg = 'قيد التشغيل الأن في : ``%s`` - `%s` - `(%s)` :notes: \nبواسطة : **%s**' % (
+                    player.voice_client.channel.name, entry.title, prog_str, entry.meta['author'].name)
         else:
             # no author (and channel), it's an autoplaylist (or autostream from my other PR) entry.
             newmsg = 'قيد التشغيل الأن تلقائي أضيف `%s` in `%s`' % (
