@@ -467,7 +467,20 @@ class MusicBot(discord.Client):
 
         channel = entry.meta.get('channel', None)
         author = entry.meta.get('author', None)
-        song_total = ftimedelta(timedelta(seconds=player.current_entry.duration))
+                  # TODO: Fix timedelta garbage with util function
+            song_progress = ftimedelta(timedelta(seconds=player.progress))
+            song_total = ftimedelta(timedelta(seconds=player.current_entry.duration))
+
+            streaming = isinstance(player.current_entry, StreamPlaylistEntry)
+            prog_str = ('`[{progress}]`' if streaming else '`[{progress}/{total}]`').format(
+                progress=song_progress, total=song_total
+            )
+            prog_bar_str = ''
+
+            # percentage shows how much of the current song has already been played
+            percentage = 0.0
+            if player.current_entry.duration > 0:
+                percentage = player.progress / player.current_entry.duratio
 
         if channel and author:
             author_perms = self.permissions.for_user(author)
