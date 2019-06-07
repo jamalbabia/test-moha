@@ -466,13 +466,7 @@ class MusicBot(discord.Client):
             await self.write_current_song(player.voice_client.channel.guild, entry)
 
         channel = entry.meta.get('channel', None)
-        author = entry.meta.get('author', None)
-        
-                 if player.is_playing:
-            # TODO: Fix timedelta garbage with util function
-            song_total = ftimedelta(timedelta(seconds=player.current_entry.duration))
-            prog_str = '`(%s)`' % (song_total)
-           
+        author = entry.meta.get('author', None)           
 
         if channel and author:
             author_perms = self.permissions.for_user(author)
