@@ -467,15 +467,8 @@ class MusicBot(discord.Client):
 
         channel = entry.meta.get('channel', None)
         author = entry.meta.get('author', None)
-                  # TODO: Fix timedelta garbage with util function
-            song_total = ftimedelta(timedelta(seconds=player.current_entry.duration))
-
-                 total=song_total
-            
-
-            # percentage shows how much of the current song has already been played
-
-
+        song_total = ftimedelta(timedelta(seconds=player.current_entry.duration))
+        total=song_total
         if channel and author:
             author_perms = self.permissions.for_user(author)
 
@@ -1826,7 +1819,7 @@ class MusicBot(discord.Client):
                 await self.safe_delete_message(self.server_specific_data[guild]['last_np_msg'])
                 self.server_specific_data[guild]['last_np_msg'] = None
 
-           
+            # TODO: Fix timedelta garbage with util function
             song_progress = ftimedelta(timedelta(seconds=player.progress))
             song_total = ftimedelta(timedelta(seconds=player.current_entry.duration))
 
