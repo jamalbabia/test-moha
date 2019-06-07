@@ -467,6 +467,7 @@ class MusicBot(discord.Client):
 
         channel = entry.meta.get('channel', None)
         author = entry.meta.get('author', None)
+        song_total = ftimedelta(timedelta(seconds=player.current_entry.duration))
 
         if channel and author:
             author_perms = self.permissions.for_user(author)
