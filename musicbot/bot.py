@@ -467,7 +467,7 @@ class MusicBot(discord.Client):
 
         channel = entry.meta.get('channel', None)
         author = entry.meta.get('author', None)
-            song_total = ftimedelta(timedelta(seconds=player.current_entry.duration))
+            song_total = ftimedelta(timedelta(seconds=player.current_entry.duration)
             prog_str = '`(%s)`' % (song_total)
 
         if channel and author:
